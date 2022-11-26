@@ -1,0 +1,58 @@
+service: testApi
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - "dynamodb:PutItem"
+            - "dynamodb:GetItem"
+            - "dynamodb:DeleteItem"
+            - "dynamodb:Scan"
+          Resource:
+            - { "Fn::GetAtt": ["ClientTable", "Arn"] }
+functions:
+  getPlanet:
+    handler: src/handlers/handlerPlanet.getPlanet
+    events:
+      - httpApi:
+          path: /planet/{id}
+          method: get
+  createClient:
+    handler: src/handlers/handlerClient.createClient
+    events:
+      - httpApi:
+          path: /client
+          method: post
+  allClients:
+    handler: src/handlers/handlerClient.allClients
+    events:
+      - httpApi:
+          path: /client
+          method: get
+    
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+
+resources:
+  Resources:
+    ClientTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ClientTable
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        AttributeDefinitions:
+          - AttributeName: clientID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: clientID
+            KeyType: HASH
