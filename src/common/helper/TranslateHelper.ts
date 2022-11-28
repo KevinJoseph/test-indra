@@ -1,5 +1,4 @@
 import { GenericObject } from '../types/GenericObject';
-import { TranslateMap } from '../types/TranslateMap';
 
 export function translate<M extends GenericObject>(schema: GenericObject, map: M): GenericObject {
   let schemaValue: any;
