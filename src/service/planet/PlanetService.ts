@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Planet } from '../../schema/Planet';
 import { PlanetServiceInterface } from './PlanetServiceInterface';
+const swapi = require('swapi-node');
 
 export class PlanetService implements PlanetServiceInterface {
   async getPlanetById(id: number): Promise<Planet> {
