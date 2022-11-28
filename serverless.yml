@@ -18,6 +18,12 @@ provider:
           Resource:
             - { "Fn::GetAtt": ["ClientTable", "Arn"] }
 functions:
+  getPlanet:
+    handler: src/handlers/handlerPlanet.getPlanet
+    events:
+      - httpApi:
+          path: /planet/{id}
+          method: get
   createClient:
     handler: src/handlers/handlerClient.createClient
     events:
@@ -29,12 +35,6 @@ functions:
     events:
       - httpApi:
           path: /client
-          method: get
-  getPlanet:
-    handler: src/handlers/handlerPlanet.getPlanet
-    events:
-      - httpApi:
-          path: /planet/{id}
           method: get
 
 plugins:
